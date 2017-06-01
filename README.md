@@ -39,3 +39,8 @@
     {
         print("Hello")
     }
+
+python
+```python
+print "Hello"
+```
