@@ -180,7 +180,8 @@ s = SubPerson2('Xin')
 print(s.name)
 ```
 
-#### 动态添加类定义时没有的属性
+#### descriptor
+动态添加类定义时没有的属性
 ```python
 class A:
     def __init__(self):
