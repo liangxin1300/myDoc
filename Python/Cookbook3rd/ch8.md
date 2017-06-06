@@ -135,3 +135,119 @@ class B(A):
         super().__init__()
         self.y = 1
 ```
+
+#### Extending a Property in a Subclass
+```python
+class Person:
+    def __init__(self, name):
+        self.name = name
+
+    # Getter function
+    @property
+    def name(self):
+        return self._name
+
+    # Setter function
+    @name.setter
+    def name(self, value):
+        if not isinstance(value, str):
+            raise TypeError('Expected a string')
+        self._name = value
+
+class SubPerson(Person):
+    @property
+    def name(self):
+        print('Getting name')
+        return super().name
+
+    @name.setter
+    def name(self, value):
+        print('Setting name to', value)
+        super(SubPerson, SubPerson).name.__set__(self, value)
+
+s = SubPerson('Guido')
+print(s.name)
+s.name = 'Larry'
+
+print("##############")
+class SubPerson2(Person):
+    @Person.name.getter
+    def name(self):
+        print('Getting name')
+        return super().name
+
+s = SubPerson2('Xin')
+print(s.name)
+```
+
+#### 动态添加类定义时没有的属性
+```python
+class A:
+    def __init__(self):
+        self.value = 'value'
+    def f(self):
+        print('function f')
+a = A()
+a.attr = 1
+print(a.attr)
+print(a.__dict__)
+# 在运行期定义的属性和类定义时定义的属性都被放在了__dict__里
+```
+```python
+class RevealAccess(object):
+    def __init__(self, initval=None, name='var'):
+        self.val = initval
+        self.name = name
+    def __get__(self, obj, objtype):
+        print('Retrieving', self.name)
+        return self.val
+    def __set__(self, obj, val):
+        print('Updating', self.name)
+        self.val = val
+
+class MyClass(object):
+    x = RevealAccess(10, 'var "x"')
+    y = 5
+
+m = MyClass()
+print(m.x)
+m.x = 20
+print(m.x)
+print(m.y)
+```
+这个RevealAccess的对象就是一个descriptor, 其作用就是在存取变量的时候做了一个hook
+访问属性m.x就是调用__get__方法，设置属性值就是调用__set__方法
+还可以有一个__delete__方法，在del m.x时被调用
+只要一个类定义了以上三种方法，其对象就是一个descriptor
+我们把同时定义__get__和__set__方法的descriptor叫做data descriptor
+把只定义__get__方法的叫non-data descriptor
+```
+```python
+class Integer:
+    def __init__(self, name):
+        self.name = name
+    def __get__(self, instance, cls):
+        if instance is None:
+            return self
+        else:
+            return instance.__dict__[self.name]
+    def __set__(self, instance, value):
+        if not isinstance(value, int):
+            raise TypeError('Expected an int')
+        instance.__dict__[self.name] = value
+    def __delete__(self, instance):
+        del instance.__dict__[self.name]
+
+class Point:
+    x = Integer('x')
+    y = Integer('y')
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+p = Point(2, 3)
+print(p.x)     #Calls Point.x.__get__(p, Point)
+p.y = 5
+print(p.y)
+print(Point.x) #Calls Point.x.__get__(None, Point)
+```
