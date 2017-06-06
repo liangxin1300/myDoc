@@ -59,4 +59,146 @@ if (((typeof unknownVariable != 'undefined' && unknownVariable) &&
 
 #### Replacing Patterns with New Strings
 ```JavaScript
+var searchString = "Now is the time, this is the tame";
+var re = /t\w{2}e/g;
+var replacement = searchString.replace(re, "place");
+console.log(replacement); // Now is the place, this is the place
+
+var re = new RegExp('t\\w{2}e', "g");
+var replacement = searchString.replace(re, "place");
+console.log(replacement);
+```
+
+#### Finding and Highlighting All Instances of a Pattern
+```JavaScript
+var searchString = "Now is the time and this is the time and that is the time";
+var pattern = /t\w*e/g;
+var matchArray;
+
+var str = "";
+//matchArray = pattern.exec(searchString);
+//console.log(matchArray)
+while((matchArray = pattern.exec(searchString)) != null) {
+  str += "at " + matchArray.index + " we found " + matchArray[0] + "\n";
+}
+console.log(str)
+
+var re = /a(p+).*(pie)/ig;
+var result = re.exec("The apples in the apple pie are tart");
+console.log(result);
+console.log(result.index);
+console.log(result.input);
+```
+
+```JavaScript
+<!DOCTYPE html>
+<html>
+<head>
+<title>Searching for strings</title>
+<style>
+.found
+{
+  background-color: #ff0;
+}
+</style>
+
+</head>
+<body>
+  <form id="textsearch">
+    <textarea id="incoming" cols="150" rows="10">
+    </textarea>
+   <p>
+     Search pattern: <input id="pattern" type="text" />
+   </p>
+  </form>
+  <button id="searchSubmit">Search for pattern</button>
+  <div id="searchResult"></div>
+
+<script>
+
+  document.getElementById("searchSubmit").onclick=function() {
+
+    // get pattern
+    var pattern = document.getElementById("pattern").value;
+    var re = new RegExp(pattern,"g");
+
+    // get string
+    var searchString = document.getElementById("incoming").value;
+
+    var matchArray;
+    var resultString = "<pre>";
+    var first=0; 
+    var last=0;
+
+    // find each match
+    while((matchArray = re.exec(searchString)) != null) {
+      last = matchArray.index;
+      
+      // get all of string up to match, concatenate
+      resultString += searchString.substring(first, last);
+
+      // add matched, with class
+      resultString += "<span class='found'>" + matchArray[0] + "</span>";
+      first = re.lastIndex;
+    }
+
+    // finish off string
+    resultString += searchString.substring(first,searchString.length);
+    resultString += "</pre>";
+
+    // insert into page
+    document.getElementById("searchResult").innerHTML = resultString;
+ }
+
+</script>
+</body>
+</html>
+```
+
+#### Swapping Words in a String Using Capturing Parentheses
+```JavaScript
+<!DOCTYPE html>
+<html>
+<head>
+<title>Searching for strings</title>
+<style>
+.found
+{
+  background-color: #ff0;
+}
+</style>
+</head>
+<body>
+  <form id="textsearch">
+    <textarea id="incoming" cols="100" rows="10">
+    </textarea>
+    <p>
+      Search pattern: <input id="pattern" type="text" />
+    </p>
+  </form>
+  <button id="searchSubmit">Search for pattern</button>
+  <div id="searchResult"></div>
+
+<script>
+
+  document.getElementById("searchSubmit").onclick=function() {
+
+    // get pattern
+    var pattern = document.getElementById("pattern").value;
+    var re = new RegExp(pattern,"g");
+
+    // get string
+    var searchString = document.getElementById("incoming").value;
+
+    // replace
+    var resultString = searchString.replace(re,"<span class='found'>$&</span>");
+    // using $& instead of using loop
+
+    // insert into page
+    document.getElementById("searchResult").innerHTML = resultString;
+ }
+
+</script>
+</body>
+</html>
 ```
