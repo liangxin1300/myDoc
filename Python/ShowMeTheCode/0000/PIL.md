@@ -28,3 +28,25 @@ def convert_pic_ext(pic_name, pic_ext):
 
 convert_pic_ext(sys.argv[1], "png")
 ```
+
+```Python
+#缩略图
+import os, sys
+from PIL import Image
+
+def make_thumb_pic(pic_name, pic_ext):
+    infile = os.path.basename(pic_name)
+    outfile = os.path.splitext(infile)[0] + ".thumbnail"
+    if infile != outfile:
+        try:
+            im = Image.open(infile)
+            x, y = im.size
+            im.thumbnail((x/2, y/2), Image.ANTIALIAS)
+            im.save(outfile, pic_ext)
+            Image.open(outfile).show()
+            os.remove(outfile)
+        except:
+            print("cannot create thumbnail for", infile)
+
+make_thumb_pic("sanpang.jpg", "JPEG")
+```
