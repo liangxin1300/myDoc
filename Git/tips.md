@@ -3,3 +3,8 @@
 git branch <branch-name>
 git push -u origin <branch-name>
 ```
+
+#### Show Changed file name only
+```
+git diff --name-only
+```
