@@ -202,3 +202,141 @@ console.log(result.input);
 </body>
 </html>
 ```
+#### Replacing HTML Tags with Named Entities
+#### Using Function Closures with Timers
+```JavaScript
+<!DOCTYPE html>
+<html>
+<head>
+<title>interval and anonymous function</title>
+<style>
+#redbox
+{
+  position: absolute;
+  left: 100px;
+  top: 100px;
+  width: 200px; height: 200px;
+  background-color: red;
+}
+</style>
+</head>
+<body>
+<div id="redbox"></div>
+<script>
+  var intervalId = null;
+
+  document.getElementById('redbox').addEventListener('click', startBox, false);
+
+  function startBox() {
+    if (intervalId == null) {
+      console.log("start");
+      var x = 100;
+      intervalId = setInterval(
+          function() {
+            x += 5;
+            var left = x + "px";
+            document.getElementById("redbox").style.left = left;
+          }, 100);
+    } else {
+      console.log("stop");
+      clearInterval(intervalId);
+      intervalId = null;
+    }
+  }
+
+</script>
+</body>
+</html>
+```
+#### Summing All Numbers in a Table Column
+```JavaScript
+<!DOCTYPE html>
+<html>
+<head>
+<title>Accessing numbers in table</title>
+</head>
+<body>
+<table id="table1">
+  <tr>
+    <td>Washington</td><td>145</td>
+  </tr>
+  <tr>
+    <td>Oregon</td><td>233</td>
+  </tr>
+  <tr>
+    <td>Missouri</td><td>833</td>
+  </tr>
+</table>
+<script type="text/javascript">
+  var sum = 0;
+  var cells = document.querySelectorAll("td + td");
+  
+  for (var i = 0; i < cells.length; i++) {
+    sum+=parseFloat(cells[i].firstChild.data);
+    console.log(cells[i])
+    console.log(sum);
+  }
+
+  var newRow = document.createElement("tr");
+  
+  var firstCell = document.createElement("td");
+  var firstCellText = document.createTextNode("Sum:");
+  firstCell.appendChild(firstCellText);
+  newRow.appendChild(firstCell);
+
+  var secondCell = document.createElement("td");
+  var secondCellText = document.createTextNode(sum);
+  secondCell.appendChild(secondCellText);
+  newRow.appendChild(secondCell);
+
+  document.getElementById("table1").appendChild(newRow);
+
+</script>
+</body>
+</html>
+```
+#### Find the Radius and Center of a Circle to Fit Within a Page Element
+```JavaScript
+<!DOCTYPE html>
+<html>
+<head>
+<title>Using Math method to fit a circle</title>
+<style type="text/css">
+#elem
+{
+  width: 600px;
+  height: 400px;
+  border: 1px solid black;
+}
+</style>
+<script type="text/javascript">
+
+window.onload = window.onresize = function() {
+  var box = document.getElementById("elem");
+  var style = window.getComputedStyle(box, null);
+
+  var height = parseInt(style.getPropertyValue("height"));
+  var width = parseInt(style.getPropertyValue("width"));
+
+  var x = width / 2;
+  var y = height / 2;
+
+  var circleRadius = Math.min(width, height) / 2;
+
+  var circ = document.getElementById("circ");
+  circ.setAttribute("r", circleRadius);
+  circ.setAttribute("cx", x);
+  circ.setAttribute("cy", y);
+}
+</script>
+</head>
+<body>
+<div id="elem">
+  <svg width="100%" height="100%">
+    <circle id="circ" width="10"  height="10"  r="10" fill="red"/>
+  </svg>
+</div>
+</body>
+</html>
+```
+####
