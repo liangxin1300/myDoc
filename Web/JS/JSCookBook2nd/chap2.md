@@ -65,3 +65,36 @@ var animals = ['elephant', 'tiger', 'lion', 'zebra', 'cat', 'dog', 'rabbit', 'go
 var domestic = animals.slice(4, 7);
 console.log(domestic);//['cat', 'dog', 'rabbit']
 ```
+```JavaScript
+var mArray = [];
+mArray[0] = ['apple', 'pear'];
+mArray[1] = ['strawberry', 'lemon'];
+mArray[2] = ['lime', 'peach', 'berry'];
+
+var nArray = mArray.slice(1, 2);
+console.log(mArray[1]); //['strawberry', 'lemon']
+nArray[0][0] = 'raspberry';
+console.log(nArray[0]); //['raspberry', 'lemon']
+console.log(mArray[1]); //['raspberry', 'lemon']
+```
+#### Applying a Function Against Each Array Element
+```JavaScript
+var charSets = ["ab", "bb", "cd", "ab", "cc", "ab", "dd", "ab"];
+
+function replaceElement(element, index, array) {
+    if (element == "ab") array[index] = "**";
+}
+
+charSets.forEach(replaceElement);
+console.log(charSets);
+```
+#### Applying a Function to Every Element in an Array and Returning a New Array
+```JavaScript
+var decArray = [23, 255, 122, 5, 16, 99];
+var hexArray = decArray.map(function(element){
+    return element.toString(16);
+});
+
+console.log(hexArray);
+```
+Unlike forEach(), the map() method results in a new array rather than modifying the original array
