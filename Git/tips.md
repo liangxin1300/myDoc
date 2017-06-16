@@ -8,3 +8,7 @@ git push -u origin <branch-name>
 ```
 git diff --name-only
 ```
+#### Move ?
+```
+git cherry-pic hashnumber
+```

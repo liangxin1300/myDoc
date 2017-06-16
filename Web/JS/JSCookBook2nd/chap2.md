@@ -98,3 +98,36 @@ var hexArray = decArray.map(function(element){
 console.log(hexArray);
 ```
 Unlike forEach(), the map() method results in a new array rather than modifying the original array
+#### Creating a Filtered Array
+```JavaScript
+// You want to filter element values in an array and assign
+// the results to a new array
+var charSet = ["**", "bb", "cd", "**", "cc", "**", "dd", "**"];
+var newArray = charSet.filter(function(element) {
+    return (element !== "**");
+});
+
+console.log(newArray);//["bb", "cd", "cc", "dd"]
+```
+#### Validating Array Contents
+```JavaScript
+// testing function
+function testValue(element, index, array) {
+  var textExp = /^[a-zA-Z]+$/;
+  return textExp.test(element);
+}
+
+var elemSet = ["**", 123, "aaa", "abc", "-", 46, "AAA"];
+
+// run test
+var result = elemSet.every(testValue);
+console.log(result);// false
+
+var elemSet2 = ["elephant", "lion", "cat", "dog"];
+result = elemSet2.every(testValue);
+console.log(result);// true
+
+result = elemSet.some(testValue);
+console.log(result);// true
+``` 
+#### Using an Associative Array to Store Form Element Names and Values
