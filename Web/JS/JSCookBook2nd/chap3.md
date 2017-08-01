@@ -100,3 +100,144 @@ final result is 720
   end of the execution queue
 */
 ```
+#### Creating a Function That Remember Its State
+```JavaScript
+function greetingMaker(greeting) {
+    function addName(name) {
+        return greeting + " " + name;
+    }
+    return addName;
+}
+
+var daytimeGreeting = greetingMaker("Good Day to you");
+var nightGreeting = greetingMaker("Good Evening");
+
+var name = 'Reader';
+
+console.log(daytimeGreeting(name));
+console.log(nightGreeting(name));
+```
+#### Converting Function Arguments into an Array
+```JavaScript
+function sumRounds() {
+    var args = [].slice.call(arguments);
+
+    return args.reduce(function(val1, val2) {
+        return parseInt(val1, 10) + parseInt(val2, 10);
+    });
+}
+
+var sum = sumRounds("2.3", 4, 5, "16", 18.1);
+console.log(sum);
+```
+```JavaScript
+<!DOCTYPE html>
+<html>
+<body>
+  <div>test</div>
+  <div>test2</div>
+  <div>test3</div>
+  <script>
+      var nlElems = document.querySelectorAll('div');
+      var aElems = [].slice.call(nlElems);
+  
+      aElems.forEach(function(elem) {
+          console.log(elem.textContent);
+      });
+  </script>
+</body>
+</html>
+```
+#### Reducing Redundancy by Using a Partial Application
+```JavaScript
+function makeString(ldelim, str, rdelim) {
+    return ldelim + str + rdelim
+}
+
+function quoteString(str) {
+    return makeString("'", str, "'")
+}
+
+function barString(str) {
+    return makeString("-", str, "-")
+}
+
+function nameEntity(str) {
+    return makeString("&#", str, ";")
+}
+
+console.log(quoteString("apple"));
+console.log(barString("apple"));
+console.log(nameEntity(169));
+```
+```JavaScript
+function partial(fn) {
+    var args = [].slice.call(arguments, 1);
+
+    return function() {
+        return fn.apply(this, args.concat([].slice.call(arguments)));
+    };
+}
+
+function add(a, b) {
+    return a + b;
+}
+
+var add100 = partial(add, 100);
+console.log(add100(14)); //114
+
+function makeString(ldelim, rdelim, str) {
+    return ldelim + str + rdelim;
+}
+
+var nameEntity = partial(makeString, "&#", ";");
+
+console.log(nameEntity(169));
+```
+```JavaScript
+function makeString(ldelim, rdelim, str) {
+  return ldelim + str + rdelim;
+}
+
+var named = makeString.bind(undefined, "&#", ";");
+
+console.log(named(269));
+```
+#### Improving Application Performance with Memoization(Caching Calculations)
+```JavaScript
+//Momoized Function
+var fibonacci = function() {
+  var memo = [0,1];
+
+  var fib = function(n) {
+    var result = memo[n];
+    if (typeof result != "number") {
+      result = fib(n-1) + fib(n-2);
+      memo[n] = result;
+    }
+    return result;
+  };
+
+  return fib;
+}();
+
+//nomemoized function
+var fib = function(n) {
+  return n < 2 ? n :  fib(n-1) + fib(n-2);
+};
+
+//run nonmemo function, with timer
+console.time("non-memo");
+for (var i = 0; i <= 10; i++) {
+  console.log(i + " " + fib(i));
+}
+console.timeEnd("non-memo");
+
+//now, memo function with timer
+console.time("memo");
+for (var i = 0; i <= 10; i++) {
+  console.log(i + " " + fibonacci(i));
+}
+console.timeEnd("memo");
+```
+#### Using an Anonymous Function to Wrap Global Variables
